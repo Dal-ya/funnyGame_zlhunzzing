@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>재밌는 게임</title>
+        <link rel="stylesheet" href="style.css"/>
+        <!-- developer: zlhunzzing -->
+    </head>
+</html>
+<body>
+    <form class='startBar'>
+        <input class='nameInput' placeholder="캐릭터의 이름을 입력해주세요.">
+        <button>시작</button>
+    </form>
+
+    <div class='Screen'>
+        <div class='statusBar'>
+            <span class="userName"></span>
+            <span class="userLevel"></span>
+            <span class="userHp"></span>
+            <span class="userPower"></span>
+            <span class="userExp"></span>
+        </div>
+    
+        <div class='menuBar'>
+            <div class='menu'>모험한다</div>
+            <div class='menu'>휴식한다</div>
+            <div class='menu'>그만한다</div>
+        </div>
+    
+        <div class='battleBar'>
+            <div class='battleMenu'>공격한다</div>
+            <div class='battleMenu'>회복한다</div>
+            <div class='battleMenu'>도망친다</div>
+        </div>
+        <div class='nextTurnBar'>
+            <div>공격한다</div>
+            <div>회복한다</div>
+            <div>도망친다</div>
+        </div>
+    
+        <div class='Messege'></div>
+    
+        <div class='MonsterStatus'>
+            <span class='monsterName'></span>
+            <span class='monsterHp'></span>
+            <span class='monsterPower'></span>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>

@@ -1,0 +1,18 @@
+.nameInput {
+    width: 200px;
+}
+.menuBar {
+    display: none;
+}
+.battleBar {
+    display: none;
+}
+.nextTurnBar {
+    display: none;
+}
+.menu:hover {
+    color: rgb(0,0,255);
+}
+.battleMenu:hover {
+    color: rgb(0,0,255);
+}
