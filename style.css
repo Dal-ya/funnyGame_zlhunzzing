@@ -1,18 +1,73 @@
-.nameInput {
-    width: 200px;
+/* 시작화면 */
+.startScreen {
+    position: relative;
+    width: 800px; height: 600px;
+    border: 1px solid black;
+}
+.title {
+    text-align: center;
+    margin: 100px;
+    font-size: 3em;
+}
+.nameBar {
+    position: absolute; left: 30%; top: 45%;
+    height: 100px; width: 300px;
+    border: 1px solid black;
+}
+.nameReque {
+    text-align: center;
+}
+.nameForm {
+    position: absolute; top: 40%; left: 25px;
+    width: 300px;
+}
+.nameBox {
+    position: absolute;
+    height: 20px; width: 200px;
+}
+.nameButton {
+    position: absolute; left: 210px;
+    height: 25px;
+}
+
+.Screen {
+    position: relative;
+    width: 800px; height: 600px;
+    border: 1px solid black;
+    display: none;
+}
+.infoBar {
+    position: absolute; bottom: 0px;
+    width: 800px; height: 160px;
+    border-top: 1px solid black;
+}
+.userInfo {
+    float: left;
+    width: 220px; height: 100%;
+    border-right: 1px solid black;
+}
+.userFace {
+    float: left;
+    width: 120px; height: 100%;
+}
+.userStat {
+    position: absolute; bottom: 10%;
+}
+.userData {
+    border-bottom: 1px dotted black;
 }
 .menuBar {
-    display: none;
-}
-.battleBar {
-    display: none;
-}
-.nextTurnBar {
     display: none;
 }
 .menu:hover {
     color: rgb(0,0,255);
 }
+.battleBar {
+    display: none;
+}
 .battleMenu:hover {
     color: rgb(0,0,255);
+}
+.nextTurnBar {
+    display: none;
 }

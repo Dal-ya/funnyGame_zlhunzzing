@@ -75,7 +75,8 @@ let game = (function () {
         return this
       },
       toggleMenu: function() {
-        document.querySelector('.startBar').style.display = 'none'
+        document.querySelector('.startScreen').style.display = 'none'
+        document.querySelector('.Screen').style.display = 'block'
         if(monster) {
           if(document.querySelector('.battleBar').style.display === 'block') {
             document.querySelector('.battleBar').style.display = 'none'
@@ -166,10 +167,10 @@ let game = (function () {
     }
 })()
 
-document.querySelector('.startBar').onsubmit = function (e) {
+document.querySelector('.nameForm').onsubmit = function (e) {
   e.preventDefault()
 
-  let name = document.querySelector('.nameInput').value
+  let name = document.querySelector('.nameBox').value
   if (name.trim() && confirm(name.trim() + '(으)로 하시겠습니까?')) {
     game.getInstance(name).showExp().toggleMenu()
   } else {

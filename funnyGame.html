@@ -1,48 +1,61 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>재밌는 게임</title>
+        <title>재밌는 RPG</title>
         <link rel="stylesheet" href="style.css"/>
         <!-- developer: zlhunzzing -->
     </head>
     <body>
-        <form class='startBar'>
-            <input class='nameInput' placeholder="캐릭터의 이름을 입력해주세요.">
-            <button>시작</button>
-        </form>
-        
+        <div class="startScreen">
+            <div class='title'>재밌는 RPG</div>
+            <div class='nameBar'>
+                <div class='nameReque'>캐릭터의 이름을 입력해주세요.</div>
+                <form class='nameForm'>
+                    <input class='nameBox' placeholder="이름">
+                    <button class='nameButton'>시작</button>
+                </form>
+            </div>
+        </div>
+
         <div class='Screen'>
-            <div class='statusBar'>
-                <span class="userName"></span>
-                <span class="userLevel"></span>
-                <span class="userHp"></span>
-                <span class="userPower"></span>
-                <span class="userExp"></span>
-            </div>
-            
-            <div class='menuBar'>
-                <span class='menu'>모험한다</span>
-                <span class='menu'>휴식한다</span>
-                <span class='menu'>그만한다</span>
-            </div>
-            
-            <div class='battleBar'>
-                <span class='battleMenu'>공격한다</span>
-                <span class='battleMenu'>회복한다</span>
-                <span class='battleMenu'>도망친다</span>
-            </div>
-            <div class='nextTurnBar'>
-                <span>공격한다</span>
-                <span>회복한다</span>
-                <span>도망친다</span>
-            </div>
-            
-            <div class='Messege'></div>
             
             <div class='MonsterStatus'>
                 <span class='monsterName'></span>
                 <span class='monsterHp'></span>
                 <span class='monsterPower'></span>
+            </div>
+
+            <div class='infoBar'>
+                <span class="userInfo">
+                    <span class="userFace"></span>
+                    <span class="userStat">
+                            <div class="userData userName"></div>
+                            <div class="userData userLevel"></div>
+                            <div class="userData userHp"></div>
+                            <div class="userData userPower"></div>
+                            <div class="userData userExp"></div>
+                        </span>
+                </span>
+
+                <div class='Messege'></div>
+
+                <div class='menuBar'>
+                    <span class='menu'>모험한다</span>
+                    <span class='menu'>휴식한다</span>
+                    <span class='menu'>그만한다</span>
+                </div>
+                    
+                <div class='battleBar'>
+                    <span class='battleMenu'>공격한다</span>
+                    <span class='battleMenu'>회복한다</span>
+                    <span class='battleMenu'>도망친다</span>
+                </div>
+                <div class='nextTurnBar'>
+                    <span>공격한다</span>
+                    <span>회복한다</span>
+                    <span>도망친다</span>
+                </div>
+                    
             </div>
         </div>
         
