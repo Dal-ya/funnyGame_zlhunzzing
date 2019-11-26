@@ -37,10 +37,10 @@ let game = (function () {
 
     return {
       showStat: function() {
-        document.querySelector('.userName').innerHTML = '이름:' + user.name
-        document.querySelector('.userLevel').innerHTML = 'Level:' + user.level
-        document.querySelector('.userHp').innerHTML = 'HP:' + user.hp + '/' + user.maxHp
-        document.querySelector('.userPower').innerHTML = 'Power:' + user.power
+        document.querySelector('.userName').innerHTML = user.name
+        document.querySelector('.userLevel').innerHTML = '레 벨 : ' + user.level
+        document.querySelector('.userHp').innerHTML = '체 력 : ' + user.hp + '/' + user.maxHp
+        document.querySelector('.userPower').innerHTML = '공격력 : ' + user.power
         if(user.hp <= 0) {
           gameOver()
         }
@@ -59,24 +59,40 @@ let game = (function () {
             now.showMessage('레벨업!');
           }, 1000);
         }
-        document.querySelector('.userExp').innerHTML = 'EXP:' + user.exp + '/' + user.level * 3
+        document.querySelector('.userExp').innerHTML = '경험치 : ' + user.exp + '/' + user.level * 3
         return this.showStat()
       },
-      generateMonster: function() {
-        monster = JSON.parse(JSON.stringify(monsters[Math.floor(Math.random() * monsters.length)]))
-        document.querySelector('.monsterName').innerHTML = '몬스터:' + monster.name
-        document.querySelector('.monsterHp').innerHTML = 'HP:' + monster.hp
-        document.querySelector('.monsterPower').innerHTML = 'Power:' + monster.power
-        this.showMessage(monster.name + ' 이(가) 위협해왔다.')
+      showMessage: function(msg) {
+        let newMessage = document.createElement('div')
+        newMessage.innerHTML = msg
+        message.prepend(newMessage)
+
+        newMessage.className = 'showMessage'
+
+        window.setTimeout(function () {
+          newMessage.className = 'hideMessage'
+
+          window.setTimeout(function () {
+            message.childNodes[message.childNodes.length-1].remove()
+          }, 2500)
+        }, 10000)
+
+
+        if(message.childNodes.length > 10) {
+          message.childNodes[10] = 'hideMessage'
+          message.childNodes[10].style.display = 'none';
+        }
+
         return this
       },
-      showMessage: function(messege) {
-        document.querySelector('.Messege').innerHTML = messege
-        return this
+      viewUser: function() {
+        let userImg = document.createElement('img')
+        userImg.src = 'https://user-images.githubusercontent.com/55573219/69599118-396b1000-104f-11ea-8757-1c5779b71c00.png'
+        viewUser.appendChild(userImg)
       },
       toggleMenu: function() {
         document.querySelector('.startScreen').style.display = 'none'
-        document.querySelector('.Screen').style.display = 'block'
+        document.querySelector('.screen').style.display = 'block'
         if(monster) {
           if(document.querySelector('.battleBar').style.display === 'block') {
             document.querySelector('.battleBar').style.display = 'none'
@@ -96,14 +112,19 @@ let game = (function () {
         }
         return this
       },
-      exit: function() {
-        document.querySelector('.Screen').innerHTML = '게임이 종료되었습니다. 새로 시작하시려면 새로고침하세요.'
+      generateMonster: function() {
+        monster = JSON.parse(JSON.stringify(monsters[Math.floor(Math.random() * monsters.length)]))
+        document.querySelector('.monsterName').innerHTML = '몬스터 : ' + monster.name
+        document.querySelector('.monsterHp').innerHTML = '/ 체력 : ' + monster.hp
+        document.querySelector('.monsterPower').innerHTML = '/ 공격력 : ' + monster.power
+        this.showMessage(monster.name + ' 이(가) 위협해왔다.')
+        return this
       },
       attackMonster: function() {
         monster.hp -= user.power
         document.querySelector('.monsterHp').innerHTML = 'HP:' + monster.hp
         if(monster.hp > 0) {
-          this.showMessage(user.power + '의 데미지를 입혔다.').nextTurn()
+          this.nextTurn().showMessage(user.power + '의 데미지를 입혔다.')
         } else
         this.win()
       },
@@ -130,10 +151,11 @@ let game = (function () {
           },1000)
           turn = !turn
         }
+        return this
       },
       attackUser: function() {
         user.hp -= monster.power
-        this.showMessage(monster.power + '의 데미지를 입었다.').showStat()
+        this.showStat().showMessage(monster.power + '의 데미지를 입었다.')
       },
       win: function() {
         user.exp += monster.exp
@@ -148,13 +170,16 @@ let game = (function () {
         return this
       },
       gameOver: function() {
-        document.querySelector('.Screen').innerHTML = user.name + '은(는) 레벨' + user.level + '에서 죽었습니다. 새로 시작하려면 새로고침하세요'
+        document.querySelector('.screen').innerHTML = user.name + '은(는) 레벨' + user.level + '에서 죽었습니다. 새로 시작하려면 새로고침하세요'
       },
       rest: function() {
         user.hp = user.maxHp;
         this.showExp().showMessage('체력이 회복되었다')
         return this
-      }
+      },
+      exit: function() {
+        document.querySelector('.screen').innerHTML = '게임이 종료되었습니다. 새로 시작하시려면 새로고침하세요.'
+      },
     }
   }
   return {
@@ -167,12 +192,12 @@ let game = (function () {
     }
 })()
 
-document.querySelector('.nameForm').onsubmit = function (e) {
+nameForm.onsubmit = function (e) {
   e.preventDefault()
 
   let name = document.querySelector('.nameBox').value
   if (name.trim() && confirm(name.trim() + '(으)로 하시겠습니까?')) {
-    game.getInstance(name).showExp().toggleMenu()
+    game.getInstance(name).showExp().toggleMenu().viewUser()
   } else {
     alert('캐릭터의 이름을 입력해주세요.')
   }
@@ -198,7 +223,7 @@ document.querySelectorAll('.battleMenu').forEach(element => {
       game.getInstance().attackMonster()
     }
     if(element.innerHTML === '회복한다') {
-      game.getInstance().rest().showExp().showMessage('체력이 회복되었다').nextTurn()
+      game.getInstance().rest().showExp().nextTurn()
     }
     if(element.innerHTML === '도망친다') {
       game.getInstance().clearMonster().showMessage('도망쳤습니다.')

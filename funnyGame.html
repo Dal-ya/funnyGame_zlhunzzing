@@ -8,55 +8,59 @@
     <body>
         <div class="startScreen">
             <div class='title'>재밌는 RPG</div>
-            <div class='nameBar'>
+            <div class='letNameBar'>
                 <div class='nameReque'>캐릭터의 이름을 입력해주세요.</div>
-                <form class='nameForm'>
+                <form id='nameForm'>
                     <input class='nameBox' placeholder="이름">
                     <button class='nameButton'>시작</button>
                 </form>
             </div>
         </div>
 
-        <div class='Screen'>
-            
-            <div class='MonsterStatus'>
+        <div class='screen'>
+
+            <div class='monsterStatus'>*
                 <span class='monsterName'></span>
                 <span class='monsterHp'></span>
                 <span class='monsterPower'></span>
             </div>
 
-            <div class='infoBar'>
-                <span class="userInfo">
-                    <span class="userFace"></span>
-                    <span class="userStat">
-                            <div class="userData userName"></div>
-                            <div class="userData userLevel"></div>
-                            <div class="userData userHp"></div>
-                            <div class="userData userPower"></div>
-                            <div class="userData userExp"></div>
-                        </span>
+            <div class='messageBar'>
+                <div id='message'></div>
+            </div>
+
+            <div id='viewUser'></div>
+
+            <span class="userInfo">
+                <span class="userFace"></span>
+                <span class="userStat">
+                    <div class="userData userName"></div>
+                    <div class="userData userLevel"></div>
+                    <div class="userData userHp"></div>
+                    <div class="userData userPower"></div>
+                    <div class="userData userExp"></div>
                 </span>
+            </span>
 
-                <div class='Messege'></div>
-
+            <div class="select">
                 <div class='menuBar'>
-                    <span class='menu'>모험한다</span>
-                    <span class='menu'>휴식한다</span>
-                    <span class='menu'>그만한다</span>
+                    <div class='menu'>모험한다</div>
+                    <div class='menu'>휴식한다</div>
+                    <div class='menu'>그만한다</div>
                 </div>
-                    
+                        
                 <div class='battleBar'>
-                    <span class='battleMenu'>공격한다</span>
-                    <span class='battleMenu'>회복한다</span>
-                    <span class='battleMenu'>도망친다</span>
+                    <div class='battleMenu'>공격한다</div>
+                    <div class='battleMenu'>회복한다</div>
+                    <div class='battleMenu'>도망친다</div>
                 </div>
                 <div class='nextTurnBar'>
-                    <span>공격한다</span>
-                    <span>회복한다</span>
-                    <span>도망친다</span>
+                    <div>공격한다</div>
+                    <div>회복한다</div>
+                    <div>도망친다</div>
                 </div>
-                    
             </div>
+                    
         </div>
         
         <script src="script.js"></script>
