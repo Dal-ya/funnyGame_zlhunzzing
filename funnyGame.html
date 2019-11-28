@@ -19,8 +19,8 @@
 
         <div id='gameScreen'>
 
-            <div class='messageBar'>
-                <div id='message'></div>
+            <div class='logBar'>
+                <div id='log'></div>
             </div>
 
             <span class="userInfo">
@@ -42,7 +42,7 @@
                     <div class='menu'>휴식한다</div>
                     <div class='menu'>그만한다</div>
                 </div>
-                        
+
                 <div class='battleBar'>
                     <div class='battleMenu'>공격한다</div>
                     <div class='battleMenu'>회복한다</div>
@@ -55,8 +55,14 @@
                 </div>
             </div>
 
-            <div id='showUser'></div>
-                    
+            <div id='viewUser'></div>
+            <div id="viewEneme"></div>
+
+        </div>
+
+        <div id='viewMessage'>
+            <div id='message'>메세지</div>
+            <input id='messageButton' type="button" value="확인">                
         </div>
         
         <script src="script.js"></script>
