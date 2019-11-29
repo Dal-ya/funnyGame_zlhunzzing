@@ -223,7 +223,8 @@
 }
 #viewMessage {
     display: none;
-    position: absolute; left: 13%; top: 20%;
+    /* position: absolute; left: 13%; top: 20%; */
+    position: absolute; left: 24%; top: 20%;
     height: 100px; width: 300px;
     border: 1px solid black;
     background-color: rgb(255,255,255);

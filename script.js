@@ -43,47 +43,45 @@ let game = (function () {
         document.querySelector('.userPower').innerHTML = '공격력 : ' + user.power
         document.querySelector('.userExp').innerHTML = '경험치 : ' + user.exp + '/' + user.level * 3
         if(user.hp <= 0) {
-          gameOver()
+          this.gameOver()
         }
         return this
       },
       showExp: function() {
         if(user.exp >= user.level * 3) {
+          user.exp -= 3 * user.level
+          user.level++
+          user.maxHp += 5
+          user.hp = user.maxHp
+          user.power += 1
+          this.showLog('레벨업!')
+
+          // effcet
+          let levelUp = document.createElement('div')
+          levelUp.className = 'fadeInUp viewPoint'
+          let effect = document.createElement('img')
+          effect.src = 'https://user-images.githubusercontent.com/55573219/69803995-ee085b80-1220-11ea-8414-af46f1e8a844.png'
+          levelUp.appendChild(effect)
+          viewUser.prepend(levelUp)
+          window.setTimeout(function () {
+            viewUser.childNodes[0].remove()
+          }, 1000)
+
+          this.showStat()
+
           let now = this
-            user.exp -= 3 * user.level
-            user.level++
-            user.maxHp += 5
-            user.hp = user.maxHp
-            user.power += 1
-            now.showLog('레벨업!')
-
-            let levelUp = document.createElement('div')
-            levelUp.className = 'fadeInUp viewPoint'
-
-            let effect = document.createElement('img')
-            effect.src = 'https://user-images.githubusercontent.com/55573219/69803995-ee085b80-1220-11ea-8414-af46f1e8a844.png'
-            levelUp.appendChild(effect)
-
-            viewUser.prepend(levelUp)
-
-            now.showStat()
-
-            window.setTimeout(function () {
-              viewUser.childNodes[0].remove()
-
-            }, 1000)
-
-            if(user.exp >= user.level * 3) {
-              now.showExp()
-            }
+          if(user.exp >= user.level * 3) {
+            now.showExp()
           }
-          return this.showStat()
+        }
+        return this.showStat()
       },
       showLog: function(msg) {
         let newLog = document.createElement('div')
         newLog.innerHTML = msg
         log.prepend(newLog)
 
+        //effect
         newLog.className = 'fadeIn'
 
         window.setTimeout(function () {
@@ -101,7 +99,7 @@ let game = (function () {
         return this
       },
       showUser: function() {
-        if(eneme) {
+        if(eneme) { // battle
           let userShow = document.createElement('div')
           userShow.id = 'showUser'
 
@@ -129,7 +127,7 @@ let game = (function () {
       toggleMenu: function() {
         document.querySelector('.startScreen').style.display = 'none'
         document.querySelector('#gameScreen').style.display = 'block'
-        if(eneme) {
+        if(eneme) { //battle
           if(document.querySelector('.battleBar').style.display === 'block') {
             document.querySelector('.battleBar').style.display = 'none'
             document.querySelector('.nextTurnBar').style.display = 'block'
@@ -196,6 +194,21 @@ let game = (function () {
           eneme.hp = 0
         }
 
+        this.hitEffect()
+
+        document.querySelector('.enemeHp').innerHTML = ' / 체력 : ' + eneme.hp
+        if(eneme.hp > 0) {
+          this.nextTurn().showLog(user.power + '의 데미지를 입혔다.')
+        } else {
+          this.showLog(user.power + '의 데미지를 입혔다.').toggleMenu()
+
+          let now = this
+          window.setTimeout(function () {
+            now.win()
+          }, 500)
+        }
+      },
+      hitEffect: function() {
         showUser.childNodes[0].remove()
         let userAttack = document.createElement('img')
         userAttack.src = 'https://user-images.githubusercontent.com/55573219/69721453-36a81200-1158-11ea-95af-4fae9c773833.gif'
@@ -208,29 +221,26 @@ let game = (function () {
           showUser.appendChild(userImg)
         }, 500)
 
-        this.hitEneme()
+        showEneme.className = 'blinking'
 
-        document.querySelector('.enemeHp').innerHTML = ' / 체력 : ' + eneme.hp
-        if(eneme.hp > 0) {
-          this.nextTurn().showLog(user.power + '의 데미지를 입혔다.')
-        } else {
-          this.showLog(user.power + '의 데미지를 입혔다.')
+        window.setTimeout(function () {
+          showUser.remove()          
+          now.showUser()          
+        }, 500)
 
-          let now = this
-          window.setTimeout(function () {
-            now.win()
-          }, 500)
-        }
+        sound()
+
+        this.damageEffect(user)
       },
-      hitEneme: function() {
-        let damage = user.power
-
+      damageEffect: function(cause) {
         let damageBar = document.createElement('div')
         damageBar.className = 'fadeInUp viewPoint'
 
         let minus = document.createElement('img')
         minus.src = 'https://user-images.githubusercontent.com/55573219/69775993-f25f5500-11dd-11ea-879e-274fc44a8888.png'
         damageBar.appendChild(minus)
+
+        let damage = cause.power
         for(let i=0; i<String(damage).length; i++) {
           let point = document.createElement('img')
           if(String(damage)[i] === '0') {
@@ -265,12 +275,18 @@ let game = (function () {
           }
           damageBar.appendChild(point)
         }
-        viewEneme.prepend(damageBar)
-
-        showEneme.className = 'blinking'
-        window.setTimeout(function () {
-          viewEneme.childNodes[0].remove()
-        }, 1000)
+        let now = this
+        if(cause === user) {
+          viewEneme.prepend(damageBar)
+          window.setTimeout(function () {
+            viewEneme.childNodes[0].remove()
+          }, 1000)
+        } else {
+          viewUser.prepend(damageBar)
+          window.setTimeout(function () {
+            viewUser.childNodes[0].remove()
+          }, 1000)
+        }
       },
       nextTurn: function() {
         let now = this
@@ -300,11 +316,13 @@ let game = (function () {
       attackUser: function() {
         user.hp -= eneme.power
 
+        this.showStat().showLog(eneme.power + '의 데미지를 입었다.').getHitEfeect()
+      },
+      getHitEfeect: function() {
         showEneme.remove()
         let enemeShow = document.createElement('div')
         enemeShow.id = 'showEneme'
         viewEneme.appendChild(enemeShow)
-
         let enemeAttack = document.createElement('img')
         if(eneme.name === '쥐') {
           enemeAttack.src = 'https://user-images.githubusercontent.com/55573219/69724384-2d6e7380-115f-11ea-823c-b13881258722.png'
@@ -316,68 +334,18 @@ let game = (function () {
           enemeAttack.src = 'https://user-images.githubusercontent.com/55573219/69724493-5d1d7b80-115f-11ea-840c-676dc19499eb.png'
         }
         showEneme.appendChild(enemeAttack)
+
+        showUser.className = 'blinking'
+
         let now = this
         window.setTimeout(function () {
           showEneme.remove()
           now.showEneme()
         }, 500)
 
-        this.showStat().showLog(eneme.power + '의 데미지를 입었다.').hitUser()
-      },
-      hitUser: function() {
-        let damage = eneme.power
+        sound()
 
-        let damageBar = document.createElement('div')
-        damageBar.className = 'fadeInUp viewPoint'
-
-        let minus = document.createElement('img')
-        minus.src = 'https://user-images.githubusercontent.com/55573219/69775993-f25f5500-11dd-11ea-879e-274fc44a8888.png'
-        damageBar.appendChild(minus)
-
-        for(let i=0; i<String(damage).length; i++) {
-          let point = document.createElement('img')
-          if(String(damage)[i] === '0') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69775996-f4291880-11dd-11ea-8ebb-bad471bc0b5f.png'
-          }
-          if(String(damage)[i] === '1') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69775999-f55a4580-11dd-11ea-869a-4aa03df08473.png'
-          }
-          if(String(damage)[i] === '2') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69776003-f7bc9f80-11dd-11ea-8446-da6148eb029d.png'
-          }
-          if(String(damage)[i] === '3') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69776006-fb502680-11dd-11ea-96f7-668e942e9593.png'
-          }
-          if(String(damage)[i] === '4') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69776012-fee3ad80-11dd-11ea-9ab2-a72a8f16f8d4.png'
-          }
-          if(String(damage)[i] === '5') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69776014-00ad7100-11de-11ea-81e4-e289f06fc6ac.png'
-          }
-          if(String(damage)[i] === '6') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69776024-05722500-11de-11ea-8e2f-78bc4a0764de.png'
-          }
-          if(String(damage)[i] === '7') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69776025-06a35200-11de-11ea-9064-2989306bfb23.png'
-          }
-          if(String(damage)[i] === '8') {
-            point.src = '(https://user-images.githubusercontent.com/55573219/69776030-07d47f00-11de-11ea-95e2-0fe9342a266f.png'
-          }
-          if(String(damage)[i] === '9') {
-            point.src = 'https://user-images.githubusercontent.com/55573219/69776034-0905ac00-11de-11ea-9ea1-91c28d3ea729.png'
-          }
-          damageBar.appendChild(point)
-        }
-        viewUser.prepend(damageBar)
-
-        showUser.className = 'blinking'
-
-        let now = this
-        window.setTimeout(function () {
-          viewUser.childNodes[0].remove()
-          showUser.remove()          
-          now.showUser()          
-        }, 1000)        
+        this.damageEffect(eneme)
       },
       win: function() {
         user.exp += eneme.exp
@@ -475,4 +443,13 @@ document.querySelectorAll('.battleMenu').forEach(element => {
 
 messageButton.onclick = function() {
   viewMessage.style.display = 'none'
+}
+
+function sound() {
+  if(audio.paused) {
+    audio.play()
+  } else {
+    audio.pause()
+    audio.currentTime = 0
+  }
 }
