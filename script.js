@@ -66,9 +66,9 @@ let game = (function () {
           window.setTimeout(function () {
             viewUser.childNodes[0].remove()
           }, 1000)
+          this.soundControl().levelUp()
 
           this.showStat()
-
           let now = this
           if(user.exp >= user.level * 3) {
             now.showExp()
@@ -228,7 +228,7 @@ let game = (function () {
           now.showUser()          
         }, 500)
 
-        sound()
+        this.soundControl().punch()
 
         this.damageEffect(user)
       },
@@ -343,7 +343,7 @@ let game = (function () {
           now.showEneme()
         }, 500)
 
-        sound()
+        this.soundControl().punch()
 
         this.damageEffect(eneme)
       },
@@ -388,6 +388,28 @@ let game = (function () {
       },
       exit: function() {
         document.querySelector('#gameScreen').innerHTML = '게임을 종료했습니다. 새로 시작하려면 새로고침하세요.'
+      },
+      soundControl: function() {
+        return {
+          punch: function() {
+            if(punchSound.paused) {
+              punchSound.play()
+            } else {
+              punchSound.pause()
+              punchSound.currentTime = 0
+            }
+          },
+          levelUp: function() {
+            if(levelUpSound.paused) {
+              levelUpSound.play()
+            } else {
+              levelUpSound.pause()
+              levelUpSound.currentTime = 0
+            }
+          },
+
+        }
+
       },
     }
   }
@@ -443,13 +465,4 @@ document.querySelectorAll('.battleMenu').forEach(element => {
 
 messageButton.onclick = function() {
   viewMessage.style.display = 'none'
-}
-
-function sound() {
-  if(audio.paused) {
-    audio.play()
-  } else {
-    audio.pause()
-    audio.currentTime = 0
-  }
 }
