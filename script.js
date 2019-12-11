@@ -426,6 +426,8 @@ let game = (function () {
 nameForm.onsubmit = function (e) {
   e.preventDefault()
 
+  bgm()
+
   let name = document.querySelector('.nameBox').value
   if (name.trim() && confirm(name.trim() + '(으)로 하겠습니까?')) {
     game.getInstance(name).showExp().toggleMenu().showUser()
@@ -465,4 +467,8 @@ document.querySelectorAll('.battleMenu').forEach(element => {
 
 messageButton.onclick = function() {
   viewMessage.style.display = 'none'
+}
+
+bgm = function() {
+    bgmSound.play()
 }
