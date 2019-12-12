@@ -381,8 +381,12 @@ let game = (function () {
           }
           this.showExp().showLog('체력을 회복했다.')
         } else {
-          user.hp = user.maxHp;
-          this.showExp().showLog('체력을 회복했다.')
+          if(user.hp === user.maxHp) {
+            this.showLog('더 회복할 수 없다.')
+          } else {
+            user.hp = user.maxHp;
+            this.showExp().showLog('체력을 회복했다.')
+          }
         }
         return this
       },
@@ -426,11 +430,10 @@ let game = (function () {
 nameForm.onsubmit = function (e) {
   e.preventDefault()
 
-  bgm()
-
   let name = document.querySelector('.nameBox').value
   if (name.trim() && confirm(name.trim() + '(으)로 하겠습니까?')) {
     game.getInstance(name).showExp().toggleMenu().showUser()
+    bgm()
   } else {
     alert('캐릭터의 이름을 입력해주세요.')
   }
