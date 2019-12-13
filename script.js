@@ -123,6 +123,7 @@ let game = (function () {
 
           viewUser.appendChild(userShow)
         }
+        return this
       },
       toggleMenu: function() {
         document.querySelector('.startScreen').style.display = 'none'
@@ -349,7 +350,7 @@ let game = (function () {
       },
       win: function() {
         user.exp += eneme.exp
-        this.showMessage('전투에서 승리했다!').showLog(eneme.name + '를 사냥해서 경험치' + eneme.exp + ' 을(를) 얻었다.').showExp().clearEneme()
+        this.showMessage('전투에서 승리했다!').showLog(eneme.name + '를 사냥해서 경험치' + eneme.exp + ' 을(를) 얻었다.').showExp().clearEneme().bgmControl().main().battle()
       },
       showMessage: function (msg) {
         message.innerHTML = msg
@@ -372,6 +373,7 @@ let game = (function () {
       },
       gameOver: function() {
         document.querySelector('#gameScreen').innerHTML = user.name + '은(는) 레벨' + user.level + '에서 죽었습니다. 새로 시작하려면 새로고침하세요'
+        this.bgmControl().battle()
       },
       rest: function() {
         if(eneme) {
@@ -392,6 +394,7 @@ let game = (function () {
       },
       exit: function() {
         document.querySelector('#gameScreen').innerHTML = '게임을 종료했습니다. 새로 시작하려면 새로고침하세요.'
+        return this
       },
       soundControl: function() {
         return {
@@ -411,9 +414,30 @@ let game = (function () {
               levelUpSound.currentTime = 0
             }
           },
-
         }
-
+      },
+      bgmControl: function() {
+        return {
+          main: function() {
+            if(mainSound.paused) {
+              mainSound.play()
+            } else {
+              mainSound.pause()
+              mainSound.currentTime = 0
+            }
+            return this
+          },
+          battle: function() {
+            if(battleSound.paused) {
+              battleSound.play()
+            } else {
+              battleSound.pause()
+              battleSound.currentTime = 0
+            }
+            return this
+          },
+          
+        }
       },
     }
   }
@@ -432,8 +456,7 @@ nameForm.onsubmit = function (e) {
 
   let name = document.querySelector('.nameBox').value
   if (name.trim() && confirm(name.trim() + '(으)로 하겠습니까?')) {
-    game.getInstance(name).showExp().toggleMenu().showUser()
-    bgm()
+    game.getInstance(name).showExp().toggleMenu().showUser().bgmControl().main()
   } else {
     alert('캐릭터의 이름을 입력해주세요.')
   }
@@ -442,13 +465,13 @@ nameForm.onsubmit = function (e) {
 document.querySelectorAll('.menu').forEach(element => {
   element.onclick = function() {
     if(element.innerHTML === '모험한다') {
-      game.getInstance().toggleMenu().generateEneme()
+      game.getInstance().toggleMenu().generateEneme().bgmControl().main().battle()
     }
     if(element.innerHTML === '휴식한다') {
       game.getInstance().rest()
     }
     if(element.innerHTML === '그만한다') {
-      game.getInstance().exit()
+      game.getInstance().exit().bgmControl().main()
     }
   }
 })
@@ -463,15 +486,11 @@ document.querySelectorAll('.battleMenu').forEach(element => {
     }
     if(element.innerHTML === '도망친다') {
       showEneme.className = 'fadeOut'
-      game.getInstance().clearEneme().showMessage('도망쳤다')
+      game.getInstance().clearEneme().showMessage('도망쳤다').bgmControl().main().battle()
     }
   }
 })
 
 messageButton.onclick = function() {
   viewMessage.style.display = 'none'
-}
-
-bgm = function() {
-    bgmSound.play()
 }
