@@ -21,7 +21,7 @@ let game = (function () {
         name: '좀비',
         level: 3,
         hp: 50,
-        power: 2,
+        power: 3,
         exp: 3
       },
       {
@@ -226,7 +226,9 @@ let game = (function () {
 
         window.setTimeout(function () {
           showUser.remove()          
-          now.showUser()          
+          now.showUser()
+          
+          showEneme.className = ''
         }, 500)
 
         this.soundControl().punch()
@@ -269,7 +271,7 @@ let game = (function () {
             point.src = 'https://user-images.githubusercontent.com/55573219/69776025-06a35200-11de-11ea-9064-2989306bfb23.png'
           }
           if(String(damage)[i] === '8') {
-            point.src = '(https://user-images.githubusercontent.com/55573219/69776030-07d47f00-11de-11ea-95e2-0fe9342a266f.png'
+            point.src = 'https://user-images.githubusercontent.com/55573219/69776030-07d47f00-11de-11ea-95e2-0fe9342a266f.png'
           }
           if(String(damage)[i] === '9') {
             point.src = 'https://user-images.githubusercontent.com/55573219/69776034-0905ac00-11de-11ea-9ea1-91c28d3ea729.png'
@@ -342,6 +344,8 @@ let game = (function () {
         window.setTimeout(function () {
           showEneme.remove()
           now.showEneme()
+
+          showUser.className = ''
         }, 500)
 
         this.soundControl().punch()
@@ -381,13 +385,13 @@ let game = (function () {
           if(user.hp > user.maxHp) {
             user.hp = user.maxHp
           }
-          this.showExp().showLog('체력을 회복했다.')
+          this.showExp().showLog('체력을 회복했다.').soundControl().rest()
         } else {
           if(user.hp === user.maxHp) {
-            this.showLog('더 회복할 수 없다.')
+            this.showLog('더 회복할 수 없다.').soundControl().rest()
           } else {
             user.hp = user.maxHp;
-            this.showExp().showLog('체력을 회복했다.')
+            this.showExp().showLog('체력을 회복했다.').soundControl().rest()
           }
         }
         return this
@@ -404,6 +408,14 @@ let game = (function () {
             } else {
               punchSound.pause()
               punchSound.currentTime = 0
+            }
+          },
+          rest: function() {
+            if(restSound.paused) {
+              restSound.play()
+            } else {
+              restSound.pause()
+              restSound.currentTime = 0
             }
           },
           levelUp: function() {
@@ -482,7 +494,7 @@ document.querySelectorAll('.battleMenu').forEach(element => {
       game.getInstance().attackEneme()
     }
     if(element.innerHTML === '회복한다') {
-      game.getInstance().rest().showExp().nextTurn()
+      game.getInstance().rest().nextTurn()
     }
     if(element.innerHTML === '도망친다') {
       showEneme.className = 'fadeOut'
