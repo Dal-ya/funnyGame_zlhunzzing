@@ -378,6 +378,7 @@ let game = (function () {
       gameOver: function() {
         document.querySelector('#gameScreen').innerHTML = user.name + '은(는) 레벨' + user.level + '에서 죽었습니다. 새로 시작하려면 새로고침하세요'
         this.bgmControl().battle()
+        this.soundControl().lose()
       },
       rest: function() {
         if(eneme) {
@@ -424,6 +425,14 @@ let game = (function () {
             } else {
               levelUpSound.pause()
               levelUpSound.currentTime = 0
+            }
+          },
+          lose: function() {
+            if(loseSound.paused) {
+              loseSound.play()
+            } else {
+              loseSound.pause()
+              loseSound.currentTime = 0
             }
           },
         }
