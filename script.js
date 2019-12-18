@@ -28,7 +28,7 @@ let game = (function () {
         name: '[Boss]늑대인간',
         level: 10,
         hp: 150,
-        power: 7,
+        power: 10,
         exp: 10
       }
     ]
@@ -382,19 +382,26 @@ let game = (function () {
       },
       rest: function() {
         if(eneme) {
+          let startPoint = user.hp
           user.hp += user.maxHp/5
           if(user.hp > user.maxHp) {
             user.hp = user.maxHp
           }
-          this.showExp().showLog('체력을 회복했다.').soundControl().rest()
+          let finishPoint = user.hp
+          let healPoint = finishPoint - startPoint
+          this.showExp().showLog('체력을 '+healPoint+'만큼 회복했다.').soundControl().rest()
         } else {
           if(user.hp === user.maxHp) {
             this.showLog('더 회복할 수 없다.').soundControl().rest()
           } else {
+            let startPoint = user.hp
             user.hp = user.maxHp;
-            this.showExp().showLog('체력을 회복했다.').soundControl().rest()
+            let finishPoint = user.hp
+            let healPoint = finishPoint - startPoint
+            this.showExp().showLog('체력을 '+healPoint+'만큼 회복했다.').soundControl().rest()
           }
         }
+        
         return this
       },
       exit: function() {
