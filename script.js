@@ -389,7 +389,7 @@ let game = (function () {
           }
           let finishPoint = user.hp
           let healPoint = finishPoint - startPoint
-          this.showExp().showLog('체력을 '+healPoint+'만큼 회복했다.').soundControl().rest()
+          this.showExp().showLog('체력을 '+healPoint+'만큼 회복했다.').healEffect(healPoint).soundControl().rest()
         } else {
           if(user.hp === user.maxHp) {
             this.showLog('더 회복할 수 없다.').soundControl().rest()
@@ -398,7 +398,7 @@ let game = (function () {
             user.hp = user.maxHp;
             let finishPoint = user.hp
             let healPoint = finishPoint - startPoint
-            this.showExp().showLog('체력을 '+healPoint+'만큼 회복했다.').soundControl().rest()
+            this.showExp().showLog('체력을 '+healPoint+'만큼 회복했다.').healEffect(healPoint).soundControl().rest()
           }
         }
         
@@ -406,6 +406,57 @@ let game = (function () {
       },
       exit: function() {
         document.querySelector('#gameScreen').innerHTML = '게임을 종료했습니다. 새로 시작하려면 새로고침하세요.'
+        return this
+      },
+      healEffect: function(heal) {
+        let healBar = document.createElement('div')
+        healBar.className = 'fadeInUp viewPoint'
+
+        let plus = document.createElement('img')
+        plus.src = 'https://user-images.githubusercontent.com/55573219/71091877-5c6d8780-21e9-11ea-904c-06b69725442c.png'
+        healBar.appendChild(plus)
+
+        for(let i=0; i<String(heal).length; i++) {
+          let point = document.createElement('img')
+          if(String(heal)[i] === '0') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091878-5c6d8780-21e9-11ea-8599-d67c74010c03.png'
+          }
+          if(String(heal)[i] === '1') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091879-5d061e00-21e9-11ea-8935-1dbf3c413d6c.png'
+          }
+          if(String(heal)[i] === '2') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091880-5d061e00-21e9-11ea-949e-39ae20378e4b.png'
+          }
+          if(String(heal)[i] === '3') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091881-5d061e00-21e9-11ea-894e-19afafc2e230.png'
+          }
+          if(String(heal)[i] === '4') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091882-5d9eb480-21e9-11ea-884f-445ce39f6008.png'
+          }
+          if(String(heal)[i] === '5') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091883-5d9eb480-21e9-11ea-82b0-d9de628c5e92.png'
+          }
+          if(String(heal)[i] === '6') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091884-5d9eb480-21e9-11ea-9e0c-2e1e3b82a6ec.png'
+          }
+          if(String(heal)[i] === '7') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091885-5e374b00-21e9-11ea-9960-550a5897a0f9.png'
+          }
+          if(String(heal)[i] === '8') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091886-5e374b00-21e9-11ea-8f45-66c5d9528252.png'
+          }
+          if(String(heal)[i] === '9') {
+            point.src = 'https://user-images.githubusercontent.com/55573219/71091888-5e374b00-21e9-11ea-9b06-ac92966f2c98.png'
+          }
+          healBar.appendChild(point)
+        }
+
+        viewUser.prepend(healBar)
+        
+        window.setTimeout(function () {
+          viewUser.childNodes[0].remove()
+        }, 1000)
+
         return this
       },
       soundControl: function() {
