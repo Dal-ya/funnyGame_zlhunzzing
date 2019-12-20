@@ -63,7 +63,7 @@ let game = (function () {
           effect.src = 'https://user-images.githubusercontent.com/55573219/69803995-ee085b80-1220-11ea-8414-af46f1e8a844.png'
           levelUp.appendChild(effect)
           viewUser.prepend(levelUp)
-          window.setTimeout(function () {
+          window.setTimeout(function() {
             viewUser.childNodes[0].remove()
           }, 1000)
           this.soundControl().levelUp()
@@ -73,6 +73,13 @@ let game = (function () {
           if(user.exp >= user.level * 3) {
             now.showExp()
           }
+        }
+
+        if(user.level > 9) {
+          let now = this
+          window.setTimeout(function() {
+            now.ending()
+          },1000)
         }
         return this.showStat()
       },
@@ -408,6 +415,11 @@ let game = (function () {
         document.querySelector('#gameScreen').innerHTML = '게임을 종료했습니다. 새로 시작하려면 새로고침하세요.'
         return this
       },
+      ending: function() {
+        gameScreen.remove()
+        endingScreen.innerHTML = '축하드립니다! ' + user.name + '은 레벨 10을 달성해서 게임에서 승리했습니다!'
+        this.bgmControl().main().ending()
+      },
       healEffect: function(heal) {
         let healBar = document.createElement('div')
         healBar.className = 'fadeInUp viewPoint'
@@ -515,7 +527,15 @@ let game = (function () {
             }
             return this
           },
-          
+          ending: function() {
+            if(endingSound.paused) {
+              endingSound.play()
+            } else {
+              endingSound.pause()
+              endingSound.currentTime = 0
+            }
+            return this
+          },
         }
       },
     }
